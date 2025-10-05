@@ -571,17 +571,19 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>BRITISH AIRWAYS T-355 BOOKING AVAILABILITY CALCULATOR</h1>
+         <header>
+            <h1>BRITISH AIRWAYS</h1>
+            <h3>T-355 reward flight availabilty date calculator</h3>
         </header>
 
         <main>
             <div class="alert-box">
-                <h3>⚠️ Critical Timing Information</h3>
-                <p><strong>BA releases award seats 354 days before departure</strong> (not 355 days). They appear at midnight UK time.</p>
-                <p><strong>To maximize your chances:</strong> Call the BA booking line at 23:50 UK time on the evening shown below. Stay on hold so you're connected when availability appears at midnight.</p>
+                <h3>What is this?</h3>
+                <p><strong>BA releases award seats 355 days before departure</strong> (including the departure date). They appear at midnight UK time (or 1am in Summer!) on that day.</p>
+                <p><strong>To maximize your chances of getting reward availability, particular in Business or First Class, you need to book flights at that time as soon as they are released.</strong></p>
+                <p>Use this calculator to find out exactly when you need to call AND to add a reminder to your calendar.</p>
             </div>
-
+        
             <div class="calculator-section">
                 <label for="travel-date">When do you want to travel?</label>
                 <input type="date" id="travel-date">
@@ -596,7 +598,7 @@
                 
                 <div class="critical-timing">
                     🎯 CALL BA ON: <span id="booking-date" style="font-size: 1.3em; display: block; margin-top: 5px;"></span>
-                    <div style="font-size: 0.95em; margin-top: 8px;">(Call at 23:50 UK time - be on hold ready for midnight release)</div>
+                    <div id="call-time" style="font-size: 0.95em; margin-top: 8px;"></div>
                 </div>
                 
                 <button class="calendar-button" id="add-to-calendar">📅 Add Reminder to Calendar</button>
@@ -614,17 +616,17 @@
 
             <div class="info-section">
                 <div class="highlight-box">
-                    <strong>How the 354-day rule works:</strong> BA releases award availability at exactly <strong>midnight UK time, 354 days before departure</strong>. Call the BA Executive Club line at 23:50 UK time the evening before (355 days before travel) and stay on hold. When midnight strikes, you'll be first in line to book.
+                    <strong>How the 354-day rule works:</strong> BA releases award availability at exactly <strong>midnight GMT, 354 days before departure</strong>. During British Summer Time (late March to late October), this means seats appear at <strong>01:00 BST</strong> instead of midnight. The calculator automatically adjusts the call time based on whether BST is in effect.
                 </div>
 
                 <h3>📋 The Booking Process</h3>
                 <ul>
-                    <li><strong>Call on the evening 355 days before travel</strong> at 23:50 UK time</li>
-                    <li><strong>Stay on hold</strong> - don't hang up, you want to be connected when midnight strikes</li>
-                    <li><strong>At midnight (00:00):</strong> Award seats appear (354 days before travel)</li>
+                    <li><strong>GMT (Standard Time):</strong> Call at 23:50 the evening before, seats appear at 00:00</li>
+                    <li><strong>BST (Summer Time):</strong> Call at 00:50, seats appear at 01:00 same night</li>
+                    <li><strong>Stay on hold</strong> - don't hang up, you want to be connected when the seats drop</li>
                     <li>Have BA Executive Club number ready: 0344 493 0787 (UK) or +44 203 250 0145 (international)</li>
                     <li>Have your Executive Club membership number, dates, routes, and cabin class ready</li>
-                    <li>Alternatively: Be logged into ba.com at 23:55, but calling is often faster</li>
+                    <li>Alternatively: Try logged into ba.com, but calling is often faster and phone agents can hold the tickets for you</li>
                 </ul>
                 
                 <h3 style="margin-top: 20px;">💡 Pro Tips</h3>
@@ -634,7 +636,7 @@
                     <li>Set multiple alarms for 23:40 UK time so you don't miss the call window</li>
                     <li>Have alternative dates ready (±1-2 days) in case your first choice is taken</li>
                     <li>Partner airlines' availability on BA metal may appear at different times</li>
-                    <li>Book one-way tickets for flexibility in mixing airlines</li>
+                    <li>Book one-way tickets for flexibility in mixing airlines. And be aware that your return ticket availability will be released later so you might have to call back a few days later, depending on the length of your trip!</li>
                     <li><strong>Critical:</strong> Convert to UK time correctly if calling from abroad!</li>
                 </ul>
             </div>
@@ -644,21 +646,11 @@
                 AdSense Ad Unit 2<br>
                 (336x280 Rectangle or 300x600 Half-Page)
             </div>
-
-            <div class="info-section" style="margin-top: 30px;">
-                <h3>🌍 Popular Routes to Book Early</h3>
-                <ul>
-                    <li>London to New York, Los Angeles, San Francisco</li>
-                    <li>London to Singapore, Hong Kong, Tokyo</li>
-                    <li>London to Sydney, Melbourne (via Singapore)</li>
-                    <li>European cities to London in Club Europe</li>
-                </ul>
-            </div>
-
+            
             <!-- BA Amex Promo Banner -->
             <div class="amex-banner">
                 <div class="amex-card-image">
-                    <img src="https://i.imgur.com/8KX9ZJm.png" alt="BA American Express Premium Plus Card">
+                    <img src="/" alt="BA American Express Premium Plus Card">
                 </div>
                 <div class="amex-content">
                     <h3>✈️ Maximize Your Avios</h3>
@@ -671,7 +663,7 @@
 
         <footer>
             <p>Not affiliated with British Airways | Calculate your perfect booking date</p>
-            <p><a href="#" id="privacy-link">Privacy Policy</a> | <a href="mailto:contact@example.com">Contact</a></p>
+            <p><a href="#" id="privacy-link">Privacy Policy</a></p>
         </footer>
     </div>
 
@@ -688,6 +680,7 @@
             <h3>2. Information We Collect</h3>
             <p><strong>Information You Provide:</strong> When you use our calculator, you enter travel dates. This information is processed locally in your browser and is not transmitted to our servers or stored permanently.</p>
             <p><strong>Automatically Collected Information:</strong> We may collect standard web analytics data including IP addresses, browser type, device information, and pages visited through cookies and similar technologies.</p>
+            <p><strong>We don't collect any other personally identifiable information.</strong></p>
 
             <h3>3. How We Use Your Information</h3>
             <p>We use the information we collect to:</p>
@@ -746,7 +739,7 @@
                 <strong>Benefits of the BA American Express Premium Plus Card:</strong>
                 <ul style="margin-top: 10px;">
                     <li><strong>25,000 Avios</strong> welcome bonus (after minimum spend)</li>
-                    <li><strong>Companion Voucher (2-4-1)</strong> when you spend £12,000 per year</li>
+                    <li><strong>Companion Voucher (2-4-1)</strong> when you spend £15,000 per year</li>
                     <li><strong>3 Avios per £1</strong> spent with British Airways, Aer Lingus, Iberia & Vueling</li>
                     <li><strong>1.5 Avios per £1</strong> spent everywhere else</li>
                     <li><strong>Free companion ticket</strong> - perfect for booking premium cabins!</li>
@@ -765,7 +758,7 @@
             </div>
 
             <p style="margin-top: 20px; font-size: 0.9em; color: #6c757d;">
-                <strong>Note:</strong> This site is not affiliated with British Airways or American Express. Terms and conditions apply to the card. The companion voucher requires a minimum spend of £12,000 per membership year.
+                <strong>Note:</strong> This site is not affiliated with British Airways or American Express. Terms and conditions apply to the card. The companion voucher requires a minimum spend of £15,000 per membership year.
             </p>
         </div>
     </div>
@@ -777,6 +770,7 @@
         const availabilityDateDisplay = document.getElementById('availability-date');
         const displayTravelDate = document.getElementById('display-travel-date');
         const daysUntilDisplay = document.getElementById('days-until');
+        const callTimeDisplay = document.getElementById('call-time');
         const addToCalendarBtn = document.getElementById('add-to-calendar');
         const privacyLink = document.getElementById('privacy-link');
         const privacyModal = document.getElementById('privacy-modal');
@@ -784,6 +778,8 @@
 
         let currentBookingDate = null;
         let currentTravelDateStr = '';
+        let currentCallTime = '';
+        let currentReleaseTime = '';
 
         // Set min date to tomorrow
         const tomorrow = new Date();
@@ -797,6 +793,28 @@
 
         travelDateInput.addEventListener('change', calculateBookingDate);
 
+        // Function to check if a date is in British Summer Time
+        function isBST(date) {
+            // BST runs from last Sunday in March to last Sunday in October
+            const year = date.getFullYear();
+            
+            // Get last Sunday in March
+            const marchLastSunday = new Date(year, 2, 31); // March 31
+            while (marchLastSunday.getDay() !== 0) {
+                marchLastSunday.setDate(marchLastSunday.getDate() - 1);
+            }
+            marchLastSunday.setHours(1, 0, 0, 0); // BST starts at 01:00 GMT
+            
+            // Get last Sunday in October
+            const octoberLastSunday = new Date(year, 9, 31); // October 31
+            while (octoberLastSunday.getDay() !== 0) {
+                octoberLastSunday.setDate(octoberLastSunday.getDate() - 1);
+            }
+            octoberLastSunday.setHours(1, 0, 0, 0); // BST ends at 01:00 GMT
+            
+            return date >= marchLastSunday && date < octoberLastSunday;
+        }
+
         function calculateBookingDate() {
             const travelDate = new Date(travelDateInput.value + 'T12:00:00');
             
@@ -809,11 +827,20 @@
             const availabilityDate = new Date(travelDate);
             availabilityDate.setDate(availabilityDate.getDate() - 354);
 
+            // Check if availability date is in BST
+            const inBST = isBST(availabilityDate);
+            const releaseTime = inBST ? '01:00 BST' : '00:00 GMT';
+            const callTime = inBST ? '00:50 BST' : '23:50 GMT';
+            
+            currentReleaseTime = releaseTime;
+            currentCallTime = callTime;
+
             // Call booking line the evening before (355 days before travel)
             const callDate = new Date(travelDate);
             callDate.setDate(callDate.getDate() - 355);
             
-            const bookingDate = callDate;
+            // If in BST, we call on the same day as availability appears (since it's 01:00)
+            const bookingDate = inBST ? availabilityDate : callDate;
             currentBookingDate = bookingDate;
             currentTravelDateStr = travelDateInput.value;
 
@@ -835,7 +862,7 @@
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
-            }) + ' at 00:00 UK time';
+            }) + ' at ' + releaseTime;
 
             const travelDateFormatted = travelDate.toLocaleDateString('en-GB', {
                 weekday: 'long',
@@ -849,10 +876,14 @@
             availabilityDateDisplay.textContent = availabilityDateFormatted;
             displayTravelDate.textContent = travelDateFormatted;
             
+            // Update call time message
+            const timeZoneNote = inBST ? '(British Summer Time - clocks forward)' : '(Greenwich Mean Time - standard time)';
+            callTimeDisplay.innerHTML = `Call at ${callTime} ${timeZoneNote}<br>Seats appear at ${releaseTime}`;
+            
             if (daysUntil < 0) {
                 daysUntilDisplay.textContent = 'Already passed - seats likely taken!';
             } else if (daysUntil === 0) {
-                daysUntilDisplay.textContent = 'TODAY! Call at 23:50 UK time!';
+                daysUntilDisplay.textContent = `TODAY! Call at ${callTime}!`;
             } else if (daysUntil === 1) {
                 daysUntilDisplay.textContent = 'Tomorrow - set your alarm!';
             } else {
@@ -868,10 +899,21 @@
 
             // Create event details
             const eventDate = new Date(currentBookingDate);
-            eventDate.setHours(23, 50, 0, 0); // Set to 23:50
+            
+            // Set time based on whether it's BST or GMT
+            const inBST = isBST(eventDate);
+            if (inBST) {
+                eventDate.setHours(0, 50, 0, 0); // 00:50 BST
+            } else {
+                eventDate.setHours(23, 50, 0, 0); // 23:50 GMT
+            }
+
+            const timeZone = inBST ? 'BST (British Summer Time)' : 'GMT (Greenwich Mean Time)';
+            const releaseTime = inBST ? '01:00 BST' : '00:00 GMT';
+            const callTime = inBST ? '00:50 BST' : '23:50 GMT';
 
             const eventTitle = 'Call BA for Award Booking';
-            const eventDetails = `Call British Airways Executive Club at 23:50 UK time to book award flight for ${currentTravelDateStr}.\n\nPhone: 0344 493 0787 (UK) or +44 203 250 0145 (international)\n\nStay on hold until midnight when availability appears!`;
+            const eventDetails = `Call British Airways Executive Club at ${callTime} to book award flight for ${currentTravelDateStr}.\n\nPhone: 0344 493 0787 (UK) or +44 203 250 0145 (international)\n\nIMPORTANT: Seats appear at ${releaseTime} (${timeZone}).\nStay on hold until then!\n\nNote: BA releases seats at midnight GMT. During British Summer Time, this is 01:00 BST.`;
             
             // Format dates for calendar (iCal format)
             const startDate = formatDateForCalendar(eventDate);
