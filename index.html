@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate the exact date to book British Airways flights 354 days in advance for maximum Avios availability">
+    <title>BA T-355 Booking Calculator | British Airways Avios Flight Booking Date Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'BASans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #2c2c2c;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0;
+            background: white;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+        }
+
+        header {
+            background: #00205b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .ba-logo {
+            display: none;
+        }
+
+        h1 {
+            font-size: 1.4em;
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            display: none;
+        }
+
+        main {
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .alert-box {
+            background: #0048a0;
+            border-left: none;
+            padding: 25px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .alert-box h3 {
+            color: white;
+            margin-bottom: 12px;
+            font-size: 1.15em;
+            font-weight: 600;
+        }
+
+        .alert-box p {
+            color: white;
+            font-size: 0.98em;
+            line-height: 1.6;
+        }
+
+        .alert-box strong {
+            color: white;
+            font-weight: 700;
+        }
+
+        .calculator-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #e5e5e5;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c2c2c;
+            font-size: 0.95em;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 16px 14px;
+            font-size: 1em;
+            border: 1px solid #8c8c8c;
+            border-radius: 4px;
+            transition: all 0.2s;
+            background: white;
+            color: #2c2c2c;
+            font-family: inherit;
+        }
+
+        input[type="date"]:hover {
+            border-color: #00205b;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #0048a0;
+            box-shadow: 0 0 0 2px rgba(0, 72, 160, 0.15);
+        }
+
+        .adsense-placeholder {
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9em;
+            margin: 30px 0;
+        }
+
+        .result {
+            background: white;
+            color: #2c2c2c;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 25px;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #e5e5e5;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h2 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #002663;
+        }
+
+        .booking-date {
+            font-size: 3em;
+            font-weight: 700;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .details p {
+            margin: 10px 0;
+            font-size: 1em;
+            color: #2c2c2c;
+        }
+
+        .critical-timing {
+            background: #0048a0;
+            color: white;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        .calendar-button {
+            background: #0048a0;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s;
+        }
+
+        .calendar-button:hover {
+            background: #003880;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,72,160,0.2);
+        }
+
+        .calendar-button:active {
+            transform: translateY(0);
+        }
+
+        .info-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .info-section h3 {
+            color: #002663;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .info-section p {
+            margin-bottom: 12px;
+            color: #475569;
+        }
+
+        .info-section ul {
+            margin-left: 20px;
+            color: #475569;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: #f0f7ff;
+            border: 1px solid #b3d9ff;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: #002663;
+            font-size: 1.05em;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 25px 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9em;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        footer a {
+            color: #0048a0;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .privacy-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .privacy-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .privacy-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .privacy-content h2 {
+            color: #002663;
+            margin-bottom: 20px;
+        }
+
+        .privacy-content h3 {
+            color: #002663;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .privacy-content p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #002663;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .close-modal:hover {
+            background: #003880;
+        }
+
+        .amex-banner {
+            background: linear-gradient(135deg, #00205b 0%, #0048a0 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .amex-card-image {
+            flex-shrink: 0;
+            width: 280px;
+            height: 176px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            overflow: hidden;
+            background: #000;
+        }
+
+        .amex-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .amex-content {
+            flex: 1;
+        }
+
+        .amex-content h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .amex-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .amex-button {
+            background: white;
+            color: #00205b;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s;
+        }
+
+        .amex-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+        }
+
+        .amex-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .amex-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .amex-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .amex-modal-content h2 {
+            color: #00205b;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .amex-modal-content h3 {
+            color: #00205b;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .amex-modal-content p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+            color: #2c2c2c;
+        }
+
+        .amex-modal-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .amex-modal-content li {
+            margin-bottom: 8px;
+            color: #2c2c2c;
+        }
+
+        .benefit-box {
+            background: #f0f7ff;
+            border: 1px solid #b3d9ff;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .benefit-box strong {
+            color: #00205b;
+            font-size: 1.1em;
+        }
+
+        .email-form {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .email-form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c2c2c;
+        }
+
+        .email-form input[type="email"] {
+            width: 100%;
+            padding: 14px;
+            font-size: 1em;
+            border: 1px solid #8c8c8c;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .email-form button {
+            background: #0048a0;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .email-form button:hover {
+            background: #003880;
+        }
+
+        @media (max-width: 600px) {
+            .amex-modal-content {
+                padding: 30px 20px;
+            }
+
+            .amex-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .amex-card-image {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+
+            main {
+                padding: 30px 20px;
+            }
+
+            .calculator-section {
+                padding: 20px;
+            }
+
+            .booking-date {
+                font-size: 2.2em;
+            }
+
+            .privacy-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BRITISH AIRWAYS T-355 BOOKING AVAILABILITY CALCULATOR</h1>
+        </header>
+
+        <main>
+            <div class="alert-box">
+                <h3>⚠️ Critical Timing Information</h3>
+                <p><strong>BA releases award seats 354 days before departure</strong> (not 355 days). They appear at midnight UK time.</p>
+                <p><strong>To maximize your chances:</strong> Call the BA booking line at 23:50 UK time on the evening shown below. Stay on hold so you're connected when availability appears at midnight.</p>
+            </div>
+
+            <div class="calculator-section">
+                <label for="travel-date">When do you want to travel?</label>
+                <input type="date" id="travel-date">
+            </div>
+
+            <div class="result" id="result">
+                <h2>📅 Your Booking Timeline</h2>
+                <div class="details">
+                    <p><strong>Travel Date:</strong> <span id="display-travel-date"></span></p>
+                    <p style="font-size: 1.2em; margin: 20px 0;"><strong>Availability Appears:</strong><br><span id="availability-date" style="font-size: 1.4em; color: #002663; font-weight: 600;"></span><br><span style="font-size: 0.9em;">(354 days before travel)</span></p>
+                </div>
+                
+                <div class="critical-timing">
+                    🎯 CALL BA ON: <span id="booking-date" style="font-size: 1.3em; display: block; margin-top: 5px;"></span>
+                    <div style="font-size: 0.95em; margin-top: 8px;">(Call at 23:50 UK time - be on hold ready for midnight release)</div>
+                </div>
+                
+                <button class="calendar-button" id="add-to-calendar">📅 Add Reminder to Calendar</button>
+                
+                <div class="details" style="margin-top: 20px;">
+                    <p><strong>Days Until Call Date:</strong> <span id="days-until"></span></p>
+                </div>
+            </div>
+
+            <!-- AdSense Placeholder 1 -->
+            <div class="adsense-placeholder">
+                AdSense Ad Unit 1<br>
+                (728x90 Leaderboard or 336x280 Rectangle)
+            </div>
+
+            <div class="info-section">
+                <div class="highlight-box">
+                    <strong>How the 354-day rule works:</strong> BA releases award availability at exactly <strong>midnight UK time, 354 days before departure</strong>. Call the BA Executive Club line at 23:50 UK time the evening before (355 days before travel) and stay on hold. When midnight strikes, you'll be first in line to book.
+                </div>
+
+                <h3>📋 The Booking Process</h3>
+                <ul>
+                    <li><strong>Call on the evening 355 days before travel</strong> at 23:50 UK time</li>
+                    <li><strong>Stay on hold</strong> - don't hang up, you want to be connected when midnight strikes</li>
+                    <li><strong>At midnight (00:00):</strong> Award seats appear (354 days before travel)</li>
+                    <li>Have BA Executive Club number ready: 0344 493 0787 (UK) or +44 203 250 0145 (international)</li>
+                    <li>Have your Executive Club membership number, dates, routes, and cabin class ready</li>
+                    <li>Alternatively: Be logged into ba.com at 23:55, but calling is often faster</li>
+                </ul>
+                
+                <h3 style="margin-top: 20px;">💡 Pro Tips</h3>
+                <ul>
+                    <li>Premium cabins (Business/First) disappear within minutes on popular routes</li>
+                    <li><strong>Calling is usually faster than the website</strong> - you'll be connected to an agent at midnight</li>
+                    <li>Set multiple alarms for 23:40 UK time so you don't miss the call window</li>
+                    <li>Have alternative dates ready (±1-2 days) in case your first choice is taken</li>
+                    <li>Partner airlines' availability on BA metal may appear at different times</li>
+                    <li>Book one-way tickets for flexibility in mixing airlines</li>
+                    <li><strong>Critical:</strong> Convert to UK time correctly if calling from abroad!</li>
+                </ul>
+            </div>
+
+            <!-- AdSense Placeholder 2 -->
+            <div class="adsense-placeholder">
+                AdSense Ad Unit 2<br>
+                (336x280 Rectangle or 300x600 Half-Page)
+            </div>
+
+            <div class="info-section" style="margin-top: 30px;">
+                <h3>🌍 Popular Routes to Book Early</h3>
+                <ul>
+                    <li>London to New York, Los Angeles, San Francisco</li>
+                    <li>London to Singapore, Hong Kong, Tokyo</li>
+                    <li>London to Sydney, Melbourne (via Singapore)</li>
+                    <li>European cities to London in Club Europe</li>
+                </ul>
+            </div>
+
+            <!-- BA Amex Promo Banner -->
+            <div class="amex-banner">
+                <div class="amex-card-image">
+                    <img src="https://i.imgur.com/8KX9ZJm.png" alt="BA American Express Premium Plus Card">
+                </div>
+                <div class="amex-content">
+                    <h3>✈️ Maximize Your Avios</h3>
+                    <p><strong>Get a Companion Voucher with the BA American Express Premium Plus Card</strong></p>
+                    <p>Earn bonus Avios and receive a 2-4-1 voucher when you spend £12,000 per year. Perfect for booking those premium cabin awards you've been planning!</p>
+                    <button class="amex-button" id="amex-button">Get a Referral Link</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Not affiliated with British Airways | Calculate your perfect booking date</p>
+            <p><a href="#" id="privacy-link">Privacy Policy</a> | <a href="mailto:contact@example.com">Contact</a></p>
+        </footer>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div class="privacy-modal" id="privacy-modal">
+        <div class="privacy-content">
+            <button class="close-modal" id="close-modal">Close</button>
+            <h2>Privacy Policy</h2>
+            <p><strong>Last Updated:</strong> October 2025</p>
+
+            <h3>1. Introduction</h3>
+            <p>This Privacy Policy explains how we collect, use, and protect your information when you use the BA T-355 Booking Calculator ("the Service").</p>
+
+            <h3>2. Information We Collect</h3>
+            <p><strong>Information You Provide:</strong> When you use our calculator, you enter travel dates. This information is processed locally in your browser and is not transmitted to our servers or stored permanently.</p>
+            <p><strong>Automatically Collected Information:</strong> We may collect standard web analytics data including IP addresses, browser type, device information, and pages visited through cookies and similar technologies.</p>
+
+            <h3>3. How We Use Your Information</h3>
+            <p>We use the information we collect to:</p>
+            <ul>
+                <li>Provide and improve the calculator functionality</li>
+                <li>Analyze website usage and trends</li>
+                <li>Display relevant advertisements through Google AdSense</li>
+            </ul>
+
+            <h3>4. Cookies and Tracking</h3>
+            <p>We use cookies and similar tracking technologies for:</p>
+            <ul>
+                <li>Essential website functionality</li>
+                <li>Analytics (Google Analytics)</li>
+                <li>Advertising (Google AdSense)</li>
+            </ul>
+            <p>You can control cookies through your browser settings. Note that disabling cookies may affect website functionality.</p>
+
+            <h3>5. Third-Party Services</h3>
+            <p><strong>Google AdSense:</strong> We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits to this website or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank">Google's Ads Settings</a>.</p>
+            <p><strong>Google Analytics:</strong> We use Google Analytics to understand how visitors use our site. Google Analytics uses cookies to collect anonymous information.</p>
+
+            <h3>6. Data Storage and Security</h3>
+            <p>Your travel date calculations are processed locally in your browser and are not stored on our servers. We implement reasonable security measures to protect any data we do collect.</p>
+
+            <h3>7. Your Rights</h3>
+            <p>Depending on your location, you may have rights including:</p>
+            <ul>
+                <li>Access to your personal information</li>
+                <li>Correction of inaccurate data</li>
+                <li>Deletion of your data</li>
+                <li>Objection to data processing</li>
+            </ul>
+
+            <h3>8. Children's Privacy</h3>
+            <p>Our Service is not intended for children under 13. We do not knowingly collect information from children under 13.</p>
+
+            <h3>9. Changes to This Policy</h3>
+            <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+
+            <h3>10. Contact Us</h3>
+            <p>If you have questions about this Privacy Policy, please contact us at: contact@example.com</p>
+
+            <h3>11. International Users</h3>
+            <p>This website is operated from the United Kingdom. If you are accessing from outside the UK, please be aware that your information may be transferred to, stored, and processed in the UK.</p>
+        </div>
+    </div>
+
+    <!-- Amex Referral Modal -->
+    <div class="amex-modal" id="amex-modal">
+        <div class="amex-modal-content">
+            <button class="close-modal" id="close-amex-modal">Close</button>
+            <h2>Get Your BA Amex Referral Link</h2>
+            
+            <div class="benefit-box">
+                <strong>Benefits of the BA American Express Premium Plus Card:</strong>
+                <ul style="margin-top: 10px;">
+                    <li><strong>25,000 Avios</strong> welcome bonus (after minimum spend)</li>
+                    <li><strong>Companion Voucher (2-4-1)</strong> when you spend £12,000 per year</li>
+                    <li><strong>3 Avios per £1</strong> spent with British Airways, Aer Lingus, Iberia & Vueling</li>
+                    <li><strong>1.5 Avios per £1</strong> spent everywhere else</li>
+                    <li><strong>Free companion ticket</strong> - perfect for booking premium cabins!</li>
+                </ul>
+            </div>
+
+            <p>Using a referral link, <strong>you'll get the standard welcome bonus</strong>, and I'll earn a small referral bonus at no extra cost to you. It's a win-win!</p>
+
+            <h3>📧 Request Your Referral Link</h3>
+            <p>Enter your email below and I'll send you a personalized referral link for the BA American Express Premium Plus Card.</p>
+
+            <div class="email-form">
+                <label for="referral-email">Your Email Address</label>
+                <input type="email" id="referral-email" placeholder="your.email@example.com" required>
+                <button type="button" id="send-referral">Send Me the Referral Link</button>
+            </div>
+
+            <p style="margin-top: 20px; font-size: 0.9em; color: #6c757d;">
+                <strong>Note:</strong> This site is not affiliated with British Airways or American Express. Terms and conditions apply to the card. The companion voucher requires a minimum spend of £12,000 per membership year.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const travelDateInput = document.getElementById('travel-date');
+        const resultDiv = document.getElementById('result');
+        const bookingDateDisplay = document.getElementById('booking-date');
+        const availabilityDateDisplay = document.getElementById('availability-date');
+        const displayTravelDate = document.getElementById('display-travel-date');
+        const daysUntilDisplay = document.getElementById('days-until');
+        const addToCalendarBtn = document.getElementById('add-to-calendar');
+        const privacyLink = document.getElementById('privacy-link');
+        const privacyModal = document.getElementById('privacy-modal');
+        const closeModal = document.getElementById('close-modal');
+
+        let currentBookingDate = null;
+        let currentTravelDateStr = '';
+
+        // Set min date to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        travelDateInput.min = tomorrow.toISOString().split('T')[0];
+
+        // Set max date to 2 years from now
+        const maxDate = new Date();
+        maxDate.setFullYear(maxDate.getFullYear() + 2);
+        travelDateInput.max = maxDate.toISOString().split('T')[0];
+
+        travelDateInput.addEventListener('change', calculateBookingDate);
+
+        function calculateBookingDate() {
+            const travelDate = new Date(travelDateInput.value + 'T12:00:00');
+            
+            if (!travelDateInput.value) {
+                resultDiv.classList.remove('show');
+                return;
+            }
+
+            // Calculate availability date (354 days before travel)
+            const availabilityDate = new Date(travelDate);
+            availabilityDate.setDate(availabilityDate.getDate() - 354);
+
+            // Call booking line the evening before (355 days before travel)
+            const callDate = new Date(travelDate);
+            callDate.setDate(callDate.getDate() - 355);
+            
+            const bookingDate = callDate;
+            currentBookingDate = bookingDate;
+            currentTravelDateStr = travelDateInput.value;
+
+            // Calculate days until booking day
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const daysUntil = Math.ceil((bookingDate - today) / (1000 * 60 * 60 * 24));
+
+            // Format dates
+            const bookingDateFormatted = bookingDate.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const availabilityDateFormatted = availabilityDate.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) + ' at 00:00 UK time';
+
+            const travelDateFormatted = travelDate.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Display results
+            bookingDateDisplay.textContent = bookingDateFormatted;
+            availabilityDateDisplay.textContent = availabilityDateFormatted;
+            displayTravelDate.textContent = travelDateFormatted;
+            
+            if (daysUntil < 0) {
+                daysUntilDisplay.textContent = 'Already passed - seats likely taken!';
+            } else if (daysUntil === 0) {
+                daysUntilDisplay.textContent = 'TODAY! Call at 23:50 UK time!';
+            } else if (daysUntil === 1) {
+                daysUntilDisplay.textContent = 'Tomorrow - set your alarm!';
+            } else {
+                daysUntilDisplay.textContent = daysUntil + ' days';
+            }
+
+            resultDiv.classList.add('show');
+        }
+
+        // Add to calendar functionality
+        addToCalendarBtn.addEventListener('click', function() {
+            if (!currentBookingDate) return;
+
+            // Create event details
+            const eventDate = new Date(currentBookingDate);
+            eventDate.setHours(23, 50, 0, 0); // Set to 23:50
+
+            const eventTitle = 'Call BA for Award Booking';
+            const eventDetails = `Call British Airways Executive Club at 23:50 UK time to book award flight for ${currentTravelDateStr}.\n\nPhone: 0344 493 0787 (UK) or +44 203 250 0145 (international)\n\nStay on hold until midnight when availability appears!`;
+            
+            // Format dates for calendar (iCal format)
+            const startDate = formatDateForCalendar(eventDate);
+            const endDate = formatDateForCalendar(new Date(eventDate.getTime() + 30 * 60000)); // 30 minutes later
+
+            // Create iCal content
+            const icalContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//BA T-355 Calculator//EN',
+                'BEGIN:VEVENT',
+                `DTSTART:${startDate}`,
+                `DTEND:${endDate}`,
+                `SUMMARY:${eventTitle}`,
+                `DESCRIPTION:${eventDetails.replace(/\n/g, '\\n')}`,
+                'BEGIN:VALARM',
+                'TRIGGER:-PT15M',
+                'DESCRIPTION:Reminder',
+                'ACTION:DISPLAY',
+                'END:VALARM',
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+
+            // Create download link
+            const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'ba-booking-reminder.ics';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        function formatDateForCalendar(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+        }
+
+        // Privacy modal
+        privacyLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            privacyModal.classList.add('show');
+        });
+
+        closeModal.addEventListener('click', function() {
+            privacyModal.classList.remove('show');
+        });
+
+        privacyModal.addEventListener('click', function(e) {
+            if (e.target === privacyModal) {
+                privacyModal.classList.remove('show');
+            }
+        });
+
+        // Amex modal
+        const amexButton = document.getElementById('amex-button');
+        const amexModal = document.getElementById('amex-modal');
+        const closeAmexModal = document.getElementById('close-amex-modal');
+        const sendReferralBtn = document.getElementById('send-referral');
+        const referralEmailInput = document.getElementById('referral-email');
+
+        amexButton.addEventListener('click', function() {
+            amexModal.classList.add('show');
+        });
+
+        closeAmexModal.addEventListener('click', function() {
+            amexModal.classList.remove('show');
+        });
+
+        amexModal.addEventListener('click', function(e) {
+            if (e.target === amexModal) {
+                amexModal.classList.remove('show');
+            }
+        });
+
+        sendReferralBtn.addEventListener('click', function() {
+            const email = referralEmailInput.value;
+            if (email && email.includes('@')) {
+                // Here you would typically send this to your backend
+                alert('Thanks! We\'ll send the referral link to ' + email + ' shortly.');
+                amexModal.classList.remove('show');
+                referralEmailInput.value = '';
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        });
+    </script>
+</body>
+</html>
