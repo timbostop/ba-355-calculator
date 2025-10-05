@@ -738,16 +738,12 @@
             <p>Using a referral link, <strong>you'll get the standard welcome bonus</strong>, and I'll earn a small referral bonus at no extra cost to you. It's a win-win!</p>
 
             <h3>📧 Request Your Referral Link</h3>
-            <p>Enter your email below and I'll send you a personalized referral link for the BA American Express Premium Plus Card.</p>
+            <p>Email me at <strong><a href="mailto:hello@t355calculator.com?subject=BA Amex Referral Request" style="color: #0048a0;">hello@t355calculator.com</a></strong> and I'll send you a personalized referral link for the BA American Express Premium Plus Card.</p>
 
-            <div class="email-form">
-                <label for="referral-email">Your Email Address</label>
-                <input type="email" id="referral-email" placeholder="your.email@example.com" required>
-                <button type="button" id="send-referral">Send Me the Referral Link</button>
-            </div>
+            <a href="mailto:hello@t355calculator.com?subject=BA Amex Referral Request&body=Hi,%0D%0A%0D%0APlease send me a referral link for the BA American Express Premium Plus Card.%0D%0A%0D%0AThanks!" class="email-button">Send Email Request</a>
 
             <p style="margin-top: 20px; font-size: 0.9em; color: #6c757d;">
-                <strong>Note:</strong> This site is not affiliated with British Airways or American Express. Terms and conditions apply to the card. The companion voucher requires a minimum spend of £15,000 per membership year.
+                <strong>Note:</strong> This site is not affiliated with British Airways or American Express. Terms and conditions apply to the card. The companion voucher requires a minimum spend of £12,000 per membership year.
             </p>
         </div>
     </div>
@@ -963,12 +959,10 @@
             }
         });
 
-        // Amex modal
+             // Amex modal
         const amexButton = document.getElementById('amex-button');
         const amexModal = document.getElementById('amex-modal');
         const closeAmexModal = document.getElementById('close-amex-modal');
-        const sendReferralBtn = document.getElementById('send-referral');
-        const referralEmailInput = document.getElementById('referral-email');
 
         amexButton.addEventListener('click', function() {
             amexModal.classList.add('show');
@@ -981,18 +975,6 @@
         amexModal.addEventListener('click', function(e) {
             if (e.target === amexModal) {
                 amexModal.classList.remove('show');
-            }
-        });
-
-        sendReferralBtn.addEventListener('click', function() {
-            const email = referralEmailInput.value;
-            if (email && email.includes('@')) {
-                // Here you would typically send this to your backend
-                alert('Thanks! We\'ll send the referral link to ' + email + ' shortly.');
-                amexModal.classList.remove('show');
-                referralEmailInput.value = '';
-            } else {
-                alert('Please enter a valid email address.');
             }
         });
     </script>
