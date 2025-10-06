@@ -751,233 +751,291 @@
 
     <script>
         const travelDateInput = document.getElementById('travel-date');
-        const resultDiv = document.getElementById('result');
-        const bookingDateDisplay = document.getElementById('booking-date');
-        const availabilityDateDisplay = document.getElementById('availability-date');
-        const displayTravelDate = document.getElementById('display-travel-date');
-        const daysUntilDisplay = document.getElementById('days-until');
-        const callTimeDisplay = document.getElementById('call-time');
-        const addToCalendarBtn = document.getElementById('add-to-calendar');
-        const privacyLink = document.getElementById('privacy-link');
-        const privacyModal = document.getElementById('privacy-modal');
-        const closeModal = document.getElementById('close-modal');
+const resultDiv = document.getElementById('result');
+const bookingDateDisplay = document.getElementById('booking-date');
+const availabilityDateDisplay = document.getElementById('availability-date');
+const displayTravelDate = document.getElementById('display-travel-date');
+const daysUntilDisplay = document.getElementById('days-until');
+const callTimeDisplay = document.getElementById('call-time');
+const addToCalendarBtn = document.getElementById('add-to-calendar');
+const addToGoogleBtn = document.getElementById('add-to-google');
+const privacyLink = document.getElementById('privacy-link');
+const privacyModal = document.getElementById('privacy-modal');
+const closeModal = document.getElementById('close-modal');
 
-        let currentBookingDate = null;
-        let currentTravelDateStr = '';
-        let currentCallTime = '';
-        let currentReleaseTime = '';
+let currentBookingDate = null;
+let currentTravelDateStr = '';
+let currentCallTime = '';
+let currentReleaseTime = '';
 
-        // Set min date to tomorrow
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        travelDateInput.min = tomorrow.toISOString().split('T')[0];
+// Set min date to tomorrow
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+travelDateInput.min = tomorrow.toISOString().split('T')[0];
 
-        // Set max date to 2 years from now
-        const maxDate = new Date();
-        maxDate.setFullYear(maxDate.getFullYear() + 2);
-        travelDateInput.max = maxDate.toISOString().split('T')[0];
+// Set max date to 2 years from now
+const maxDate = new Date();
+maxDate.setFullYear(maxDate.getFullYear() + 2);
+travelDateInput.max = maxDate.toISOString().split('T')[0];
 
-        travelDateInput.addEventListener('change', calculateBookingDate);
+travelDateInput.addEventListener('change', calculateBookingDate);
 
-        // Function to check if a date is in British Summer Time
-        function isBST(date) {
-            // BST runs from last Sunday in March to last Sunday in October
-            const year = date.getFullYear();
-            
-            // Get last Sunday in March
-            const marchLastSunday = new Date(year, 2, 31); // March 31
-            while (marchLastSunday.getDay() !== 0) {
-                marchLastSunday.setDate(marchLastSunday.getDate() - 1);
-            }
-            marchLastSunday.setHours(1, 0, 0, 0); // BST starts at 01:00 GMT
-            
-            // Get last Sunday in October
-            const octoberLastSunday = new Date(year, 9, 31); // October 31
-            while (octoberLastSunday.getDay() !== 0) {
-                octoberLastSunday.setDate(octoberLastSunday.getDate() - 1);
-            }
-            octoberLastSunday.setHours(1, 0, 0, 0); // BST ends at 01:00 GMT
-            
-            return date >= marchLastSunday && date < octoberLastSunday;
-        }
+// Function to check if a date is in British Summer Time
+function isBST(date) {
+    const year = date.getFullYear();
+    
+    // Get last Sunday in March
+    const marchLastSunday = new Date(year, 2, 31);
+    while (marchLastSunday.getDay() !== 0) {
+        marchLastSunday.setDate(marchLastSunday.getDate() - 1);
+    }
+    marchLastSunday.setHours(1, 0, 0, 0);
+    
+    // Get last Sunday in October
+    const octoberLastSunday = new Date(year, 9, 31);
+    while (octoberLastSunday.getDay() !== 0) {
+        octoberLastSunday.setDate(octoberLastSunday.getDate() - 1);
+    }
+    octoberLastSunday.setHours(1, 0, 0, 0);
+    
+    return date >= marchLastSunday && date < octoberLastSunday;
+}
 
-        function calculateBookingDate() {
-            const travelDate = new Date(travelDateInput.value + 'T12:00:00');
-            
-            if (!travelDateInput.value) {
-                resultDiv.classList.remove('show');
-                return;
-            }
+function calculateBookingDate() {
+    const travelDate = new Date(travelDateInput.value + 'T12:00:00');
+    
+    if (!travelDateInput.value) {
+        resultDiv.classList.remove('show');
+        return;
+    }
 
-            // Calculate availability date (354 days before travel)
-            const availabilityDate = new Date(travelDate);
-            availabilityDate.setDate(availabilityDate.getDate() - 354);
+    // Calculate availability date (354 days before travel)
+    const availabilityDate = new Date(travelDate);
+    availabilityDate.setDate(availabilityDate.getDate() - 354);
 
-            // Check if availability date is in BST
-            const inBST = isBST(availabilityDate);
-            const releaseTime = inBST ? '01:00 BST' : '00:00 GMT';
-            const callTime = inBST ? '00:50 BST' : '23:50 GMT';
-            
-            currentReleaseTime = releaseTime;
-            currentCallTime = callTime;
+    // Check if availability date is in BST
+    const inBST = isBST(availabilityDate);
+    const releaseTime = inBST ? '01:00 BST' : '00:00 GMT';
+    const callTime = inBST ? '00:50 BST' : '23:50 GMT';
+    
+    currentReleaseTime = releaseTime;
+    currentCallTime = callTime;
 
-            // Call booking line the evening before (355 days before travel)
-            const callDate = new Date(travelDate);
-            callDate.setDate(callDate.getDate() - 355);
-            
-            // If in BST, we call on the same day as availability appears (since it's 01:00)
-            const bookingDate = inBST ? availabilityDate : callDate;
-            currentBookingDate = bookingDate;
-            currentTravelDateStr = travelDateInput.value;
+    // Call booking line the evening before (355 days before travel)
+    const callDate = new Date(travelDate);
+    callDate.setDate(callDate.getDate() - 355);
+    
+    // If in BST, we call on the same day as availability appears (since it's 01:00)
+    const bookingDate = inBST ? availabilityDate : callDate;
+    currentBookingDate = bookingDate;
+    currentTravelDateStr = travelDateInput.value;
 
-            // Calculate days until booking day
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const daysUntil = Math.ceil((bookingDate - today) / (1000 * 60 * 60 * 24));
+    // Calculate days until booking day
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const daysUntil = Math.ceil((bookingDate - today) / (1000 * 60 * 60 * 24));
 
-            // Format dates
-            const bookingDateFormatted = bookingDate.toLocaleDateString('en-GB', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+    // Format dates
+    const bookingDateFormatted = bookingDate.toLocaleDateString('en-GB', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
-            const availabilityDateFormatted = availabilityDate.toLocaleDateString('en-GB', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            }) + ' at ' + releaseTime;
+    const availabilityDateFormatted = availabilityDate.toLocaleDateString('en-GB', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }) + ' at ' + releaseTime;
 
-            const travelDateFormatted = travelDate.toLocaleDateString('en-GB', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+    const travelDateFormatted = travelDate.toLocaleDateString('en-GB', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
-            // Display results
-            bookingDateDisplay.textContent = bookingDateFormatted;
-            availabilityDateDisplay.textContent = availabilityDateFormatted;
-            displayTravelDate.textContent = travelDateFormatted;
-            
-            // Update call time message
-            const timeZoneNote = inBST ? '(British Summer Time - clocks forward)' : '(Greenwich Mean Time - standard time)';
-            callTimeDisplay.innerHTML = `Call at ${callTime} ${timeZoneNote}<br>Seats appear at ${releaseTime}`;
-            
-            if (daysUntil < 0) {
-                daysUntilDisplay.textContent = 'Already passed - seats likely taken!';
-            } else if (daysUntil === 0) {
-                daysUntilDisplay.textContent = `TODAY! Call at ${callTime}!`;
-            } else if (daysUntil === 1) {
-                daysUntilDisplay.textContent = 'Tomorrow - set your alarm!';
-            } else {
-                daysUntilDisplay.textContent = daysUntil + ' days';
-            }
+    // Display results
+    bookingDateDisplay.textContent = bookingDateFormatted;
+    availabilityDateDisplay.textContent = availabilityDateFormatted;
+    displayTravelDate.textContent = travelDateFormatted;
+    
+    // Update call time message
+    const timeZoneNote = inBST ? '(British Summer Time - clocks forward)' : '(Greenwich Mean Time - standard time)';
+    callTimeDisplay.innerHTML = `Call at ${callTime} ${timeZoneNote}<br>Seats appear at ${releaseTime}`;
+    
+    if (daysUntil < 0) {
+        daysUntilDisplay.textContent = 'Already passed - seats likely taken!';
+    } else if (daysUntil === 0) {
+        daysUntilDisplay.textContent = `TODAY! Call at ${callTime}!`;
+    } else if (daysUntil === 1) {
+        daysUntilDisplay.textContent = 'Tomorrow - set your alarm!';
+    } else {
+        daysUntilDisplay.textContent = daysUntil + ' days';
+    }
 
-            resultDiv.classList.add('show');
-        }
+    resultDiv.classList.add('show');
+}
 
-        // Add to calendar functionality
-        addToCalendarBtn.addEventListener('click', function() {
-            if (!currentBookingDate) return;
+// Add to Google Calendar
+addToGoogleBtn.addEventListener('click', function() {
+    if (!currentBookingDate) return;
 
-            // Create event details
-            const eventDate = new Date(currentBookingDate);
-            
-            // Set time based on whether it's BST or GMT
-            const inBST = isBST(eventDate);
-            if (inBST) {
-                eventDate.setHours(0, 50, 0, 0); // 00:50 BST
-            } else {
-                eventDate.setHours(23, 50, 0, 0); // 23:50 GMT
-            }
+    const eventDate = new Date(currentBookingDate);
+    const inBST = isBST(eventDate);
+    
+    if (inBST) {
+        eventDate.setHours(0, 50, 0, 0);
+    } else {
+        eventDate.setHours(23, 50, 0, 0);
+    }
 
-            const timeZone = inBST ? 'BST (British Summer Time)' : 'GMT (Greenwich Mean Time)';
-            const releaseTime = inBST ? '01:00 BST' : '00:00 GMT';
-            const callTime = inBST ? '00:50 BST' : '23:50 GMT';
+    const timeZone = inBST ? 'BST (British Summer Time)' : 'GMT (Greenwich Mean Time)';
+    const releaseTime = inBST ? '01:00 BST' : '00:00 GMT';
+    const callTime = inBST ? '00:50 BST' : '23:50 GMT';
 
-            const eventTitle = 'Call BA for Award Booking';
-            const eventDetails = `Call British Airways Executive Club at ${callTime} to book award flight for ${currentTravelDateStr}.\n\nPhone: 0344 493 0787 (UK) or +44 203 250 0145 (international)\n\nIMPORTANT: Seats appear at ${releaseTime} (${timeZone}).\nStay on hold until then!\n\nNote: BA releases seats at midnight GMT. During British Summer Time, this is 01:00 BST.`;
-            
-            // Format dates for calendar (iCal format)
-            const startDate = formatDateForCalendar(eventDate);
-            const endDate = formatDateForCalendar(new Date(eventDate.getTime() + 30 * 60000)); // 30 minutes later
+    const eventTitle = 'Call BA for Award Booking';
+    const eventDetails = `Call British Airways Executive Club at ${callTime} to book award flight for ${currentTravelDateStr}.
 
-            // Create iCal content
-            const icalContent = [
-                'BEGIN:VCALENDAR',
-                'VERSION:2.0',
-                'PRODID:-//BA T-355 Calculator//EN',
-                'BEGIN:VEVENT',
-                `DTSTART:${startDate}`,
-                `DTEND:${endDate}`,
-                `SUMMARY:${eventTitle}`,
-                `DESCRIPTION:${eventDetails.replace(/\n/g, '\\n')}`,
-                'BEGIN:VALARM',
-                'TRIGGER:-PT15M',
-                'DESCRIPTION:Reminder',
-                'ACTION:DISPLAY',
-                'END:VALARM',
-                'END:VEVENT',
-                'END:VCALENDAR'
-            ].join('\r\n');
+Phone: 0344 493 0787 (UK) or +44 203 250 0145 (international)
 
-            // Create download link
-            const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'ba-booking-reminder.ics';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
+IMPORTANT: Seats appear at ${releaseTime} (${timeZone}).
+Stay on hold until then!
 
-        function formatDateForCalendar(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
-            return `${year}${month}${day}T${hours}${minutes}${seconds}`;
-        }
+Note: BA releases seats at midnight GMT. During British Summer Time, this is 01:00 BST.`;
 
-        // Privacy modal
-        privacyLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            privacyModal.classList.add('show');
-        });
+    // Format for Google Calendar URL
+    const startDateTime = formatDateForGoogle(eventDate);
+    const endDateTime = formatDateForGoogle(new Date(eventDate.getTime() + 30 * 60000));
 
-        closeModal.addEventListener('click', function() {
-            privacyModal.classList.remove('show');
-        });
+    // Build Google Calendar URL
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+        `&text=${encodeURIComponent(eventTitle)}` +
+        `&dates=${startDateTime}/${endDateTime}` +
+        `&details=${encodeURIComponent(eventDetails)}` +
+        `&sf=true&output=xml`;
 
-        privacyModal.addEventListener('click', function(e) {
-            if (e.target === privacyModal) {
-                privacyModal.classList.remove('show');
-            }
-        });
+    // Open in new tab
+    window.open(googleCalendarUrl, '_blank');
+});
 
-             // Amex modal
-        const amexButton = document.getElementById('amex-button');
-        const amexModal = document.getElementById('amex-modal');
-        const closeAmexModal = document.getElementById('close-amex-modal');
+function formatDateForGoogle(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+}
 
-        amexButton.addEventListener('click', function() {
-            amexModal.classList.add('show');
-        });
+// Add to calendar functionality (.ics download)
+addToCalendarBtn.addEventListener('click', function() {
+    if (!currentBookingDate) return;
 
-        closeAmexModal.addEventListener('click', function() {
+    // Create event details
+    const eventDate = new Date(currentBookingDate);
+    
+    // Set time based on whether it's BST or GMT
+    const inBST = isBST(eventDate);
+    if (inBST) {
+        eventDate.setHours(0, 50, 0, 0);
+    } else {
+        eventDate.setHours(23, 50, 0, 0);
+    }
+
+    const timeZone = inBST ? 'BST (British Summer Time)' : 'GMT (Greenwich Mean Time)';
+    const releaseTime = inBST ? '01:00 BST' : '00:00 GMT';
+    const callTime = inBST ? '00:50 BST' : '23:50 GMT';
+
+    const eventTitle = 'Call BA for Award Booking';
+    const eventDetails = `Call British Airways Executive Club at ${callTime} to book award flight for ${currentTravelDateStr}.\n\nPhone: 0344 493 0787 (UK) or +44 203 250 0145 (international)\n\nIMPORTANT: Seats appear at ${releaseTime} (${timeZone}).\nStay on hold until then!\n\nNote: BA releases seats at midnight GMT. During British Summer Time, this is 01:00 BST.`;
+    
+    // Format dates for calendar (iCal format)
+    const startDate = formatDateForCalendar(eventDate);
+    const endDate = formatDateForCalendar(new Date(eventDate.getTime() + 30 * 60000));
+
+    // Create iCal content
+    const icalContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//BA T-355 Calculator//EN',
+        'BEGIN:VEVENT',
+        `DTSTART:${startDate}`,
+        `DTEND:${endDate}`,
+        `SUMMARY:${eventTitle}`,
+        `DESCRIPTION:${eventDetails.replace(/\n/g, '\\n')}`,
+        'BEGIN:VALARM',
+        'TRIGGER:-PT15M',
+        'DESCRIPTION:Reminder',
+        'ACTION:DISPLAY',
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+    ].join('\r\n');
+
+    // Create download link
+    const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'ba-booking-reminder.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+
+function formatDateForCalendar(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+}
+
+// Privacy modal
+privacyLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    privacyModal.classList.add('show');
+});
+
+closeModal.addEventListener('click', function() {
+    privacyModal.classList.remove('show');
+});
+
+privacyModal.addEventListener('click', function(e) {
+    if (e.target === privacyModal) {
+        privacyModal.classList.remove('show');
+    }
+});
+
+// Amex modal (only if you uncomment the banner)
+const amexButton = document.getElementById('amex-button');
+const amexModal = document.getElementById('amex-modal');
+const closeAmexModal = document.getElementById('close-amex-modal');
+
+if (amexButton) {
+    amexButton.addEventListener('click', function() {
+        amexModal.classList.add('show');
+    });
+}
+
+if (closeAmexModal) {
+    closeAmexModal.addEventListener('click', function() {
+        amexModal.classList.remove('show');
+    });
+}
+
+if (amexModal) {
+    amexModal.addEventListener('click', function(e) {
+        if (e.target === amexModal) {
             amexModal.classList.remove('show');
-        });
-
-        amexModal.addEventListener('click', function(e) {
-            if (e.target === amexModal) {
-                amexModal.classList.remove('show');
-            }
-        });
+        }
+    });
+}
     </script>
 </body>
 </html>
