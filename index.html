@@ -564,6 +564,8 @@
                 return;
             }
 
+            gtag('event', 'EnterADate', {});
+
             const availabilityDate = new Date(travelDate);
             availabilityDate.setDate(availabilityDate.getDate() - 354);
 
